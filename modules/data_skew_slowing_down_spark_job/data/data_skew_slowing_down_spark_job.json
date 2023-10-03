@@ -1,0 +1,186 @@
+{
+  "name": "data_skew_slowing_down_spark_job",
+  "description": "Data skew slowing down a Spark job is a common incident that occurs when there is an uneven distribution of data across partitions. This can lead to some partitions handling a much larger amount of data than others, causing delays and slowing down the entire job. The result is a significant decrease in performance and a longer processing time for the Spark job.",
+  "params": [
+    {
+      "name": "PATH_TO_SPARK_HOME",
+      "value": ""
+    },
+    {
+      "name": "SPARK_JOB_CONFIG_FILE",
+      "value": ""
+    },
+    {
+      "name": "INSERT_INPUT_PATH",
+      "value": ""
+    },
+    {
+      "name": "SPARK_JOB_JAR_FILE",
+      "value": ""
+    },
+    {
+      "name": "NUMBER_OF_WORKER_INSTANCES",
+      "value": ""
+    },
+    {
+      "name": "SPARK_MASTER_PORT",
+      "value": ""
+    },
+    {
+      "name": "SPARK_JOB_LOG_FILE",
+      "value": ""
+    },
+    {
+      "name": "HOST_NAME",
+      "value": ""
+    },
+    {
+      "name": "K8S_CLUSTER_NAME",
+      "value": ""
+    },
+    {
+      "name": "NAMESPACE",
+      "value": ""
+    }
+  ],
+  "cells": [
+    {
+      "name": "cell_1",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Data Skew Slowing Down Spark Job.\nData skew slowing down a Spark job is a common incident that occurs when there is an uneven distribution of data across partitions. This can lead to some partitions handling a much larger amount of data than others, causing delays and slowing down the entire job. The result is a significant decrease in performance and a longer processing time for the Spark job."
+    },
+    {
+      "name": "cell_2",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check Spark job logs for errors"
+    },
+    {
+      "name": "cell_3",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `grep -i error ${SPARK_JOB_LOG_FILE}`"
+    },
+    {
+      "name": "cell_4",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check Spark job logs for warnings"
+    },
+    {
+      "name": "cell_5",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `grep -i warning ${SPARK_JOB_LOG_FILE}`"
+    },
+    {
+      "name": "cell_6",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check Spark job logs for information"
+    },
+    {
+      "name": "cell_7",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `grep -i info ${SPARK_JOB_LOG_FILE}`"
+    },
+    {
+      "name": "cell_8",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check for data skew in Spark job logs"
+    },
+    {
+      "name": "cell_9",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `grep -i \"data skew\" ${SPARK_JOB_LOG_FILE}`"
+    },
+    {
+      "name": "cell_10",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the Spark job configuration for any issues"
+    },
+    {
+      "name": "cell_11",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `cat ${SPARK_JOB_CONFIG_FILE}`"
+    },
+    {
+      "name": "cell_12",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the Spark job DAG for any issues"
+    },
+    {
+      "name": "cell_13",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `spark-submit --class org.apache.spark.sql.execution.ui.SparkUI ${SPARK_JOB_JAR_FILE}`"
+    },
+    {
+      "name": "cell_14",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the Spark job task execution time and distribution"
+    },
+    {
+      "name": "cell_15",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `spark-submit --class org.apache.spark.sql.execution.ui.SparkUI ${SPARK_JOB_JAR_FILE}`"
+    },
+    {
+      "name": "cell_16",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the Spark job task failures"
+    },
+    {
+      "name": "cell_17",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `spark-submit --class org.apache.spark.sql.execution.ui.SparkUI ${SPARK_JOB_JAR_FILE}`"
+    },
+    {
+      "name": "cell_18",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Check the Spark job task metrics"
+    },
+    {
+      "name": "cell_19",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "(host | host_name=$HOST_NAME) union (pod | k8s_cluster_name=$K8S_CLUSTER_NAME | namespace=$NAMESPACE) | `spark-submit --class org.apache.spark.sql.execution.ui.SparkUI ${SPARK_JOB_JAR_FILE}`"
+    },
+    {
+      "name": "cell_20",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Imbalanced data distribution: If the data is not evenly distributed across the nodes in the cluster, some nodes may have to process more data than others, leading to data skew and slower processing times."
+    },
+    {
+      "name": "cell_21",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "host | host_name=$HOST_NAME | invoke_script_data_distribution($INSERT_INPUT_PATH, $SPARK_JOB_JAR_FILE)"
+    },
+    {
+      "name": "cell_22",
+      "type": "MARKDOWN",
+      "enabled": true,
+      "content": "## Increase the number of executors or worker nodes in the Spark cluster to distribute the workload evenly."
+    },
+    {
+      "name": "cell_23",
+      "type": "OP_LANG",
+      "enabled": true,
+      "content": "host | host_name=$HOST_NAME | invoke_update_spark_worker_instances($PATH_TO_SPARK_HOME, $NUMBER_OF_WORKER_INSTANCES, $SPARK_MASTER_PORT)"
+    }
+  ]
+}
